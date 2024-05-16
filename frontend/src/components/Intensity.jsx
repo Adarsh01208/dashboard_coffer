@@ -4,6 +4,8 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Heading, Select } from '@chakra-ui/react';
 
 const Intensity = ({ data }) => {
+
+  
   const [selectedYear, setSelectedYear] = useState('All');
 
   // Extract unique years from the provided data
