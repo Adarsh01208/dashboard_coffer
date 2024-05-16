@@ -6,9 +6,13 @@ import React from 'react'
 
 const App = () => {
   return (
-    <div>
-      <Home />
-    </div>
+    <>
+      <div className="flex">
+        <main className="grow">
+          <Home />
+        </main>
+      </div>
+    </>
   )
 }
 

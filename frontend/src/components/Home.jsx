@@ -1,6 +1,8 @@
 
-import React from 'react'
-import useData from '../Hooks/useData';
+import React, { useEffect, useState } from 'react'
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+import axios from 'axios';
 import { ChakraProvider, Flex, Box, Grid } from "@chakra-ui/react";
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
@@ -15,8 +17,21 @@ import Year from './Year';
 import Footer from './Footer';
 
 const Home = () => {
-  const data = useData(); 
-  console.log(data);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchDataFromApi = async () => {
+      const API_URL = "http://localhost:8000"; // replace with your backend URL
+      try {
+        const response = await axios.get(`${API_URL}/data`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchDataFromApi();
+  }, []);
   return (
     <div>
       <ChakraProvider>
@@ -63,6 +78,7 @@ const Home = () => {
         <Footer/>
       </Box>
     </ChakraProvider>
+
 
     </div>
    
