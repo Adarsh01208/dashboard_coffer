@@ -1,17 +1,13 @@
 
 import './App.css';
-import Navbar from  './components/Navbar'
-import Sidebar from  './components/Sidebar'
-import Footer from  './components/Footer'
-
+import Home from './components/Home';
 import React from 'react'
+
 
 const App = () => {
   return (
     <div>
-      <Navbar />
-      <Sidebar />
-      <Footer />
+      <Home />
     </div>
   )
 }

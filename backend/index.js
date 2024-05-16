@@ -1,19 +1,18 @@
 // Importing express module 
 const express = require("express");
-const port = 8000
-const app = express();
 const db = require('./config/connection');
+const dataRouter = require('./routes/data');
+const port = process.env.PORT || 8000;
+const cors = require('cors');
+const app = express();
+require('dotenv').config(); 
 
-// Handling GET / request 
-app.use("/", (req, res, next) => { 
-    res.send("express server"); 
-}) 
+app.use(cors());
 
-// Handling GET /hello request 
-app.get("/hello     ", (req, res, next) => { 
-    res.send("hello response"); 
-}) 
+app.use(express.json());
 
+
+app.use('/', dataRouter);
 // Server setup 
 app.listen(port, (err) => { 
     if (err) { 
@@ -21,3 +20,4 @@ app.listen(port, (err) => {
     }
     console.log("Yup! My Express Server is running on port", port);
 })
+
