@@ -1,19 +1,27 @@
+import { useState, useEffect } from 'react';
 
-import{ useState, useEffect } from 'react'
 const useData = () => {
+  const [data, setData] = useState();
+  const [error, setError] = useState(null);
 
-    const [data, setData] = useState();
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    useEffect(() => {
-        fetchData();
-    },[])
-
-    const fetchData = async () => {
-        const data = await fetch('http://localhost:8000/data')
-        const json = await data.json();
-      //  console.log(json);
-        setData(json);
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/data');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const json = await response.json();
+      setData(json);
+    } catch (error) {
+      setError(error.toString());
     }
-    return data;
-}
-export default useData ;
+  };
+
+  return { data, error };
+};
+
+export default useData;
