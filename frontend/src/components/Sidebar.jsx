@@ -1,95 +1,87 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const Sidebar = ({ setSelectedComponent }) => {
-    const [hoveredComponent, setHoveredComponent] = useState(null);
+const Sidebar = () => {
+  const [hoveredComponent, setHoveredComponent] = useState(null);
 
-    const handleComponentSelect = (componentName) => {
-      setSelectedComponent(componentName);
-    };
-  
-    const handleMouseEnter = (componentName) => {
-      setHoveredComponent(componentName);
-    };
-  
-    const handleMouseLeave = () => {
-      setHoveredComponent(null);
-    };
-  
-  
+  const handleMouseEnter = (componentName) => {
+    setHoveredComponent(componentName);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredComponent(null);
+  };
+
   return (
-    <>
-     <div className="h-screen w-64 fixed bg-gray-800 text-white p-5"style={{ zIndex: 1, top: '4rem'  }}>
+    <div className="h-screen w-64 fixed bg-gray-800 text-white p-5" style={{ zIndex: 1, top: '4rem' }}>
       <h2 className="text-2xl mb-5">Dashboard Components</h2>
       <ul>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'IntensityChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('IntensityChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('IntensityChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Home' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Home')}
+          onMouseLeave={handleMouseLeave}
         >
-          Intensity Chart
+          <Link to="/">Home</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'LikelihoodRadarChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('LikelihoodRadarChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('LikelihoodRadarChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Intensity' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Intensity')}
+          onMouseLeave={handleMouseLeave}
         >
-          Likelihood Radar Chart
+          <Link to="/intensity">Intensity</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'RelevanceBubbleChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('RelevanceBubbleChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('RelevanceBubbleChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Region' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Region')}
+          onMouseLeave={handleMouseLeave}
         >
-          Relevance Bubble Chart
+          <Link to="/region">Region</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'YearChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('YearChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('YearChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Topics' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Topics')}
+          onMouseLeave={handleMouseLeave}
         >
-          Year Chart
+          <Link to="/topics">Topics</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'CountryChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('CountryChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('CountryChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Relevance' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Relevance')}
+          onMouseLeave={handleMouseLeave}
         >
-          Country Chart
+          <Link to="/relevance">Relevance</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'TopicsRadarChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('TopicsRadarChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('TopicsRadarChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Sector' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Sector')}
+          onMouseLeave={handleMouseLeave}
         >
-          Topics Radar Chart
+          <Link to="/sector">Sector</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'RegionChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('RegionChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('RegionChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Likelihood' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Likelihood')}
+          onMouseLeave={handleMouseLeave}
         >
-          Region Chart
+          <Link to="/likelihood">Likelihood</Link>
         </li>
         <li 
-          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'PieChart' ? 'bg-gray-700' : ''}`} 
-          onMouseEnter={() => handleMouseEnter('PieChart')} 
-          onMouseLeave={handleMouseLeave} 
-          onClick={() => handleComponentSelect('PieChart')}
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Country' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Country')}
+          onMouseLeave={handleMouseLeave}
         >
-          Pie Chart
+          <Link to="/country">Country</Link>
+        </li>
+        <li 
+          className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Year' ? 'bg-gray-700' : ''}`}
+          onMouseEnter={() => handleMouseEnter('Year')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Link to="/year">Year</Link>
         </li>
       </ul>
     </div>
+  );
+};
 
-    </>
-  )
-}
-
-export default Sidebar
+export default Sidebar;
