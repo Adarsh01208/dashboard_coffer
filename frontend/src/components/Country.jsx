@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Bar } from "react-chartjs-2";
+import React, { useState, useEffect, useRef } from "react";
+import * as d3 from "d3";
 import {
   Box,
   Flex,
@@ -14,9 +14,13 @@ const Country = ({ data }) => {
   const [selectedCountry, setSelectedCountry] = useState(
     "United States of America"
   );
-  const [chartData, setChartData] = useState(null);
+  const chartRef = useRef(null);
 
   useEffect(() => {
+    drawChart();
+  }, [selectedCountry, data, colorMode]);
+
+  const drawChart = () => {
     const countryData = data.filter(
       (entry) => entry.country === selectedCountry
     );
@@ -39,32 +43,65 @@ const Country = ({ data }) => {
         ? "rgba(79, 59, 169, 0.7)"
         : "rgba(144, 104, 190, 0.7)";
 
-    setChartData({
-      labels: sectorLabels,
-      datasets: [
-        {
-          label: "Intensity",
-          data: sectorIntensities,
-          backgroundColor: chartBackgroundColor,
-        },
-      ],
-    });
-  }, [selectedCountry, data, colorMode]);
+    // Remove existing chart if any
+    d3.select(chartRef.current).selectAll("*").remove();
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-        grid: {
-          color: colorMode === "light" ? "gray.200" : "gray.900",
-        },
-      },
-    },
+    // Set up dimensions and margins
+    const margin = { top: 50, right: 50, bottom: 70, left: 70 };
+    const width = 600 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    // Create SVG container
+    const svg = d3.select(chartRef.current)
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Create scales
+    const xScale = d3.scaleBand()
+      .domain(sectorLabels)
+      .range([0, width])
+      .padding(0.2);
+
+    const yScale = d3.scaleLinear()
+      .domain([0, d3.max(sectorIntensities, d => d3.max(d))])
+      .nice()
+      .range([height, 0]);
+
+    // Add bars
+    svg.selectAll("rect")
+      .data(sectorIntensities)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => xScale(sectorLabels[i]))
+      .attr("y", d => yScale(d3.max(d)))
+      .attr("width", xScale.bandwidth())
+      .attr("height", d => height - yScale(d3.max(d)))
+      .attr("fill", chartBackgroundColor);
+
+    // Add X axis
+    svg.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", "rotate(-45)");
+
+    // Add Y axis
+    svg.append("g")
+      .call(d3.axisLeft(yScale));
+    
+    // Add chart title
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", -20)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px")
+      .text("Intensity by Sector");
   };
 
   const handleCountryChange = (event) => {
@@ -72,15 +109,13 @@ const Country = ({ data }) => {
   };
 
   return (
-    <Box p={6} shadow="md" bg={useColorModeValue("white", "gray.800")} m={50}>
-      <Flex direction="column" margin={'auto'}>
-        <Heading as={"h2"} textAlign="left" mb={4} style={{ textAlign: "left" }} >
-          Country Chart
-        </Heading>
+    <Box p={6} shadow="lg" bg={useColorModeValue("white", "gray.800")} m={50}>
+    <Flex direction="column">
+      <Flex justify="space-between" align="center" mb={4}>
+        <Heading as="h4">Country</Heading>
         <Select
           value={selectedCountry}
           onChange={handleCountryChange}
-          mb={4}
           w="200px"
           colorScheme="purple"
         >
@@ -93,11 +128,10 @@ const Country = ({ data }) => {
           <option value="Russia">Russia</option>
           <option value="Saudi Arabia">Saudi Arabia</option>
         </Select>
-        <Box height="500px" width={"100%"}>
-          {chartData && <Bar data={chartData} options={chartOptions} />}
-        </Box>
       </Flex>
-    </Box>
+      <Box height="500px" ref={chartRef}></Box>
+    </Flex>
+  </Box>
   );
 };
 

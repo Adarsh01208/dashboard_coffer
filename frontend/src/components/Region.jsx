@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { Box, Heading, Select } from '@chakra-ui/react';
+import { Box, Flex, Heading, Select } from '@chakra-ui/react';
 
 const Region = ({ data }) => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -59,22 +59,22 @@ const Region = ({ data }) => {
 
   return (
     <Box>
-      <Heading as="h2" mb={4}>
-        Region Distribution
-      </Heading>
-      {/* Filter by region */}
-      <Select
-        value={selectedRegion}
-        onChange={(e) => setSelectedRegion(e.target.value)}
-        mb={4}
-        placeholder="Select a region"
-      >
-        <option value="">All Regions</option>
-        {allRegions.map((region, index) => (
-          <option key={index} value={region}>{region}</option>
-        ))}
-      </Select>
-      {/* Display doughnut chart */}
+      <Flex align="center" justify="space-between" mb={4}>
+        <Heading as="h4" mb={0}>
+          Regions
+        </Heading>
+        <Select
+          value={selectedRegion}
+          onChange={(e) => setSelectedRegion(e.target.value)}
+          w="200px"
+          placeholder="Select a region"
+        >
+          <option value="">All Regions</option>
+          {allRegions.map((region, index) => (
+            <option key={index} value={region}>{region}</option>
+          ))}
+        </Select>
+      </Flex>
       <Doughnut data={chartData} />
     </Box>
   );

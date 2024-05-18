@@ -1,29 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PolarArea } from 'react-chartjs-2';
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Heading, Select, Flex } from '@chakra-ui/react';
 
 const Topics = ({ data }) => {
-  const topics = data.map(item => item.topic);
+  const [selectedTopic, setSelectedTopic] = useState('All'); // Set default value to 'All'
+
+  // Extract unique topics
+  const topics = ['All', ...new Set(data.map(item => item.topic))];
+
+  // Filter data based on the selected topic
+  const filteredData = selectedTopic === 'All' ? data : data.filter(item => item.topic === selectedTopic);
 
   const chartData = {
-    labels: topics,
+    labels: filteredData.map(item => item.topic),
     datasets: [
       {
-        data: data.map(item => item.relevance),
+        data: filteredData.map(item => item.relevance),
         backgroundColor: [
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-          'rgba(255, 205, 86, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
+          '#FF6384', // Red
+          '#36A2EB', // Blue
+          '#FFCE56', // Yellow
+          '#4BC0C0', // Teal
+          '#9966FF', // Purple
         ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 205, 86, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
+        borderColor: '#fff',
         borderWidth: 1,
       },
     ],
@@ -39,11 +39,20 @@ const Topics = ({ data }) => {
     },
   };
 
+  const handleTopicChange = (event) => {
+    setSelectedTopic(event.target.value);
+  };
+
   return (
     <Box>
-      <Heading as="h2" mb={4}>
-        Topics Chart
-      </Heading>
+      <Flex justify="space-between" align="center" mb={4}>
+        <Heading as="h4">Topics</Heading>
+        <Select value={selectedTopic} onChange={handleTopicChange} w="200px">
+          {topics.map((topic, index) => (
+            <option key={index} value={topic}>{topic}</option>
+          ))}
+        </Select>
+      </Flex>
       <PolarArea data={chartData} options={chartOptions} />
     </Box>
   );

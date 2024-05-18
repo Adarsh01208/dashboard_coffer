@@ -52,7 +52,7 @@ const Relevance = ({ data }) => {
 
   return (
     <Box margin={50} p={4} mt={8} borderRadius={18} boxShadow ='0px 0px 10px rgba(0, 0, 0, 0.1)'>
-      <Heading as="h2" mb={4}>Relevance Chart</Heading>
+      <Heading as="h4" mb={4}>Relevance</Heading>
       <Line data={chartData} options={chartOptions} />
     </Box>
   );

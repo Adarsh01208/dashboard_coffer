@@ -14,8 +14,9 @@ const Sidebar = () => {
 
   return (
     <div className="h-screen w-64 fixed bg-gray-800 text-white p-5" style={{ zIndex: 1, top: '4rem' }}>
-      <h2 className="text-2xl mb-5">Dashboard Components</h2>
-      <ul>
+      <h2 cl className="text-2xl m-5 font-bold text-center">Dashboard</h2>
+      
+      <ul className='text-center'>
         <li 
           className={`mb-3 px-4 py-2 rounded cursor-pointer ${hoveredComponent === 'Home' ? 'bg-gray-700' : ''}`}
           onMouseEnter={() => handleMouseEnter('Home')}

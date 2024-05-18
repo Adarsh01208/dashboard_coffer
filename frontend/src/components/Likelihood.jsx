@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Radar } from "react-chartjs-2";
-import { Box, useColorModeValue, Heading } from "@chakra-ui/react";
+import { Box, useColorModeValue, Heading, Select, Flex } from "@chakra-ui/react";
 
 const Likelihood = ({ data }) => {
+  const [selectedCountry, setSelectedCountry] = useState("All");
+
+  // Extract unique countries
+  const countries = ["All", ...new Set(data.map((entry) => entry.country))];
+
+  // Filter data based on the selected country
+  const filteredData =
+    selectedCountry === "All"
+      ? data
+      : data.filter((entry) => entry.country === selectedCountry);
+
   const chartData = {
-    labels: data.map((entry) => entry.country),
+    labels: filteredData.map((entry) => entry.country),
     datasets: [
       {
         label: "Likelihood",
-        data: data.map((entry) => entry.likelihood),
+        data: filteredData.map((entry) => entry.likelihood),
         backgroundColor: useColorModeValue(
           "rgba(79, 59, 169, 0.7)",
           "rgba(144, 104, 190, 0.7)"
@@ -36,8 +47,29 @@ const Likelihood = ({ data }) => {
         min: 0,
         max: 5,
         stepSize: 1,
+        font: {
+          family: "Roboto",
+          size: 14,
+          weight: "bold",
+        },
       },
     },
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          font: {
+            family: "Roboto",
+            size: 14,
+            weight: "bold",
+          },
+        },
+      },
+    },
+  };
+
+  const handleCountryChange = (event) => {
+    setSelectedCountry(event.target.value);
   };
 
   return (
@@ -49,12 +81,37 @@ const Likelihood = ({ data }) => {
       shadow="md"
       pb={100}
       bg={useColorModeValue("white", "gray.800")}
-      maxHeight={700} 
-      overflow="hidden" 
+      maxHeight={700}
+      overflow="hidden"
     >
-      <Heading as="h2" mb={4} ml={6}>
-        Likelihood Chart
-      </Heading>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        px={6}
+        py={4}
+        borderBottom="1px solid"
+        borderColor={useColorModeValue("gray.200", "gray.600")}
+      >
+        <Heading as="h4" mb={0}  fontWeight="bold">
+          Likelihood
+        </Heading>
+        <Select
+          value={selectedCountry}
+          onChange={handleCountryChange}
+          mb={0}
+          ml={4}
+          w="200px"
+          borderColor={useColorModeValue("gray.200", "gray.600")}
+          focusBorderColor="purple.500"
+          fontSize="md"
+        >
+          {countries.map((country, index) => (
+            <option key={index} value={country}>
+              {country}
+            </option>
+          ))}
+        </Select>
+      </Flex>
 
       <Radar data={chartData} options={chartOptions} />
     </Box>

@@ -3,7 +3,7 @@ import React from 'react'
 const Navbar = () => {
     return (
         <>
-            <nav className="bg-white dark:bg-white-900 text-black fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+            <nav className="bg-slate-50 dark:bg-white-900 text-black fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 shadow-md">
                 <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
                     <img
                         src="https://blackcoffer.com/wp-content/uploads/2023/10/Black-720x172-4.png"

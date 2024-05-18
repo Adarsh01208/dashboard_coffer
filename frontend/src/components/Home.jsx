@@ -3,8 +3,6 @@ import { CategoryScale } from "chart.js";
 import React, { useEffect, useState } from 'react'
 import useData from '../Hooks/useData';
 import { ChakraProvider, Flex, Box, Grid } from "@chakra-ui/react";
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
 import Intensity from './Intensity';
 import Region from './Region';
 import Topics from './Topics';
@@ -33,11 +31,9 @@ const Home = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div>
+    <div className="bg-slate-50">
       <ChakraProvider>
-      <Sidebar/>
       <Box ml={{ base: 0, md: 64 }}>
-        <Navbar />
         <div className="mt-10 p-2">
           <Intensity data={data} />
           <Flex direction={{ base: "column", md: "row" }} m={50}>
@@ -65,7 +61,6 @@ const Home = () => {
           <Relevance data={data} />
           <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
             <Box>
-              .
               <Sector data={data} />
             </Box>
             <Box>

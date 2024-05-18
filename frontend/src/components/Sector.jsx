@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
-import { Box, Heading, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading, useColorModeValue, Flex, Select } from "@chakra-ui/react";
 
 const Sector = ({ data }) => {
+  const [selectedSector, setSelectedSector] = useState("");
+
+  const handleSectorChange = (event) => {
+    setSelectedSector(event.target.value);
+  };
+
+  const filteredData =
+    selectedSector === ""
+      ? data
+      : data.filter((entry) => entry.sector === selectedSector);
+
   const sectors = {};
 
-  data.forEach((entry) => {
+  filteredData.forEach((entry) => {
     if (!sectors[entry.sector]) {
       sectors[entry.sector] = 0;
     }
@@ -49,7 +60,7 @@ const Sector = ({ data }) => {
 
   return (
     <Box
-      p={6}
+      p={8}
       borderRadius={20}
       boxShadow="0px 0px 10px rgba(0, 0, 0, 0.1)"
       mt={50}
@@ -60,9 +71,26 @@ const Sector = ({ data }) => {
       maxHeight={700}
       overflow="hidden"
     >
-      <Heading as="h2" mb={4}>
-        Sector Chart
-      </Heading>
+      <Flex alignItems="center" justifyContent="space-between" mb={4}>
+        <Heading as="h4" mb={0}>
+          Sector
+        </Heading>
+        <Select
+          value={selectedSector}
+          onChange={handleSectorChange}
+          w="200px"
+          borderColor={useColorModeValue("gray.200", "gray.600")}
+          focusBorderColor="purple.500"
+          fontSize="md"
+        >
+          <option value="">All Sectors</option>
+          {Object.keys(sectors).map((sector, index) => (
+            <option key={index} value={sector}>
+              {sector}
+            </option>
+          ))}
+        </Select>
+      </Flex>
 
       <Pie data={chartData} options={chartOptions} />
     </Box>
