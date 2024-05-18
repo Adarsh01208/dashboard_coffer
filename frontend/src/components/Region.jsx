@@ -57,6 +57,21 @@ const Region = ({ data }) => {
     ],
   };
 
+  // Options for the pie chart
+  const options = {
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data) => {
+          const dataset = data.datasets[tooltipItem.datasetIndex];
+          const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+          const currentValue = dataset.data[tooltipItem.index];
+          const percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+          return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+        }
+      }
+    }
+  };
+
   return (
     <Box>
       <Flex align="center" justify="space-between" mb={4}>
@@ -75,7 +90,7 @@ const Region = ({ data }) => {
           ))}
         </Select>
       </Flex>
-      <Doughnut data={chartData} />
+      <Doughnut data={chartData} options={options} />
     </Box>
   );
 };

@@ -79,7 +79,9 @@ const Country = ({ data }) => {
       .attr("y", d => yScale(d3.max(d)))
       .attr("width", xScale.bandwidth())
       .attr("height", d => height - yScale(d3.max(d)))
-      .attr("fill", chartBackgroundColor);
+      .attr("fill", chartBackgroundColor)
+      .append("title")
+      .text((d, i) => `Sector: ${sectorLabels[i]}\nIntensity: ${d3.max(d)}`);
 
     // Add X axis
     svg.append("g")
@@ -94,7 +96,22 @@ const Country = ({ data }) => {
     // Add Y axis
     svg.append("g")
       .call(d3.axisLeft(yScale));
-    
+
+    // Add X axis label
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width / 2 + margin.left)
+      .attr("y", height + margin.top + 40)
+      .text("Sector");
+
+    // Add Y axis label
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left + 20)
+      .attr("x", -margin.top - height / 2 + 20)
+      .text("Intensity");
+
     // Add chart title
     svg.append("text")
       .attr("x", width / 2)
@@ -109,29 +126,29 @@ const Country = ({ data }) => {
   };
 
   return (
-    <Box p={6} shadow="lg" bg={useColorModeValue("white", "gray.800")} m={50}>
-    <Flex direction="column">
-      <Flex justify="space-between" align="center" mb={4}>
-        <Heading as="h4">Country</Heading>
-        <Select
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          w="200px"
-          colorScheme="purple"
-        >
-          <option value="United States of America">
-            United States of America
-          </option>
-          <option value="Mexico">Mexico</option>
-          <option value="Nigeria">Nigeria</option>
-          <option value="Lebanon">Lebanon</option>
-          <option value="Russia">Russia</option>
-          <option value="Saudi Arabia">Saudi Arabia</option>
-        </Select>
+    <Box p={6} shadow="md" bg={useColorModeValue("white", "gray.800")} borderRadius={20} m={50}>
+      <Flex direction="column">
+        <Flex justify="space-between" align="center" mb={4}>
+          <Heading as="h4">Country</Heading>
+          <Select
+            value={selectedCountry}
+            onChange={handleCountryChange}
+            w="200px"
+            colorScheme="purple"
+          >
+            <option value="United States of America">
+              United States of America
+            </option>
+            <option value="Mexico">Mexico</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="Lebanon">Lebanon</option>
+            <option value="Russia">Russia</option>
+            <option value="Saudi Arabia">Saudi Arabia</option>
+          </Select>
+        </Flex>
+        <Box height="500px" ref={chartRef}></Box>
       </Flex>
-      <Box height="500px" ref={chartRef}></Box>
-    </Flex>
-  </Box>
+    </Box>
   );
 };
 

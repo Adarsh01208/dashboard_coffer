@@ -45,6 +45,7 @@ const Intensity = ({ data }) => {
 
     const yScale = d3.scaleLinear()
       .domain([0, d3.max(intensityData)])
+      .nice()
       .range([height, 0]);
 
     // Add bars
@@ -57,20 +58,9 @@ const Intensity = ({ data }) => {
       .attr('width', xScale.bandwidth())
       .attr('height', d => height - yScale(d))
       .attr('fill', '#6c757d')
-      .attr('opacity', '0.7');
-
-    // Add labels
-    svg.selectAll('text')
-      .data(intensityData)
-      .enter()
-      .append('text')
-      .text(d => d + '%')
-      .attr('x', (d, i) => xScale(years[i]) + xScale.bandwidth() / 2)
-      .attr('y', d => yScale(d) - 10)
-      .attr('text-anchor', 'middle')
-      .attr('font-family', 'Arial, sans-serif')
-      .attr('font-size', '12px')
-      .attr('fill', 'black');
+      .attr('opacity', '0.7')
+      .append("title")
+      .text((d) => `${d}%`);
 
     // Add X axis
     svg.append('g')
@@ -86,6 +76,25 @@ const Intensity = ({ data }) => {
       .call(d3.axisLeft(yScale))
       .selectAll('text')
       .attr('font-size', '12px');
+
+    // Add X axis label
+    svg.append('text')
+      .attr('x', width / 2)
+      .attr('y', height + margin.bottom - 10)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'Arial, sans-serif')
+      .attr('font-size', '14px')
+      .text('Year');
+
+    // Add Y axis label
+    svg.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -height / 2)
+      .attr('y', -margin.left + 20)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'Arial, sans-serif')
+      .attr('font-size', '14px')
+      .text('Intensity (%)');
 
     // Add chart title
     svg.append('text')

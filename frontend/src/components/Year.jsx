@@ -6,11 +6,11 @@ const Year = ({ data }) => {
   const chartRef = useRef();
 
   useEffect(() => {
-    const refCurrent = chartRef.current;  // Store the current value of chartRef
+    const refCurrent = chartRef.current;
 
     // Extract start year and end year from the data
-    const startYears = data.map(item => item.start_year);
-    const endYears = data.map(item => item.end_year);
+    const startYears = data.map(item => item.start_year).filter(year => year !== null);
+    const endYears = data.map(item => item.end_year).filter(year => year !== null);
 
     // Count occurrences of years
     const startYearCounts = {};
@@ -22,17 +22,17 @@ const Year = ({ data }) => {
       endYearCounts[year] = endYearCounts[year] ? endYearCounts[year] + 1 : 1;
     });
 
-    const allYears = [...new Set([...Object.keys(startYearCounts), ...Object.keys(endYearCounts)])].sort();
+    const allYears = [...new Set([...Object.keys(startYearCounts), ...Object.keys(endYearCounts)])].sort((a, b) => a - b);
     const startYearValues = allYears.map(year => startYearCounts[year] || 0);
     const endYearValues = allYears.map(year => endYearCounts[year] || 0);
 
     // Set up dimensions and margins
-    const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+    const margin = { top: 20, right: 30, bottom: 60, left: 70 };
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
     // Create SVG container
-    const svg = d3.select(refCurrent)  // Use refCurrent instead of chartRef.current
+    const svg = d3.select(refCurrent)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -69,7 +69,9 @@ const Year = ({ data }) => {
       .attr('y', d => y(d))
       .attr('width', x.bandwidth() / 2)
       .attr('height', d => height - y(d))
-      .attr('fill', 'rgb(75, 192, 192)');
+      .attr('fill', 'rgb(75, 192, 192)')
+      .append("title")
+      .text((d, i) => `Start Year: ${allYears[i]}\nCount: ${d}`);
 
     // Add bars for end years
     svg.selectAll('.bar-end')
@@ -81,11 +83,60 @@ const Year = ({ data }) => {
       .attr('y', d => y(d))
       .attr('width', x.bandwidth() / 2)
       .attr('height', d => height - y(d))
+      .attr('fill', 'rgb(255, 99, 132)')
+      .append("title")
+      .text((d, i) => `End Year: ${allYears[i]}\nCount: ${d}`);
+
+    // Add X axis label
+    svg.append('text')
+      .attr('text-anchor', 'end')
+      .attr('x', width / 2 + margin.left)
+      .attr('y', height + margin.top + 20)
+      .text('Year');
+
+    // Add Y axis label
+    svg.append('text')
+      .attr('text-anchor', 'end')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', -margin.left + 20)
+      .attr('x', -margin.top - height / 2 + 20)
+      .text('Count');
+
+    // Add legend
+    const legend = svg.append('g')
+      .attr('transform', `translate(${width - 150}, 10)`);
+
+    legend.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', 'rgb(75, 192, 192)');
+
+    legend.append('text')
+      .attr('x', 30)
+      .attr('y', 15)
+      .text('Start Year')
+      .style('font-size', '14px')
+      .attr('alignment-baseline', 'middle');
+
+    legend.append('rect')
+      .attr('x', 0)
+      .attr('y', 30)
+      .attr('width', 20)
+      .attr('height', 20)
       .attr('fill', 'rgb(255, 99, 132)');
+
+    legend.append('text')
+      .attr('x', 30)
+      .attr('y', 45)
+      .text('End Year')
+      .style('font-size', '14px')
+      .attr('alignment-baseline', 'middle');
 
     // Cleanup function to remove the SVG on component unmount
     return () => {
-      d3.select(refCurrent).select('svg').remove();  // Use refCurrent instead of chartRef.current
+      d3.select(refCurrent).select('svg').remove();
     };
   }, [data]);
 
